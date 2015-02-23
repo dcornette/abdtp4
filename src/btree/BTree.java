@@ -11,7 +11,7 @@ public class BTree {
 	public BTree(int order, int initialValue) {
 		List<Integer> initialList = new ArrayList<Integer>();
 		initialList.add(initialValue);
-		this.root = new BTreeLeafNode(initialList);
+		this.root = new BTreeLeafNode(initialList, order, null);
 		this.order = order;
 	}
 	
@@ -33,8 +33,23 @@ public class BTree {
 		return this.search(key, innerNode.getNodes().get(innerNode.getIndexByKey(key)));
 	}
 	
-	public void insert(int value) {
-		
+	/**
+	 * Algorithme d'insertion d'une clé dans l'abre
+	 * @param value
+	 * @param node
+	 * @throws DuplicateValueException
+	 */
+	public void insert(int value, BTreeNode node) throws DuplicateValueException {
+		if(node instanceof BTreeLeafNode) {
+			BTreeLeafNode leafNode = (BTreeLeafNode) node;
+			if(leafNode.search(value)) {
+				throw new DuplicateValueException();
+			}
+			leafNode.addValue(value);
+		} else {
+			BTreeInnerNode innerNode = (BTreeInnerNode) node;
+			this.insert(value, innerNode.getNodes().get(innerNode.getIndexByKey(value)));
+		}
 	}
 	
 	public void delete(int value) {

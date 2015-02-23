@@ -4,24 +4,12 @@ import java.util.List;
 
 public class BTreeInnerNode extends BTreeNode {
 	
-	List<BTreeNode> children;
-	List<Integer> keys;
+	private List<BTreeNode> children;
 	
-	public BTreeInnerNode(List<BTreeNode> children, List<Integer> keys) {
+	public BTreeInnerNode(List<BTreeNode> children, List<Integer> keys, int order, BTreeNode parent) {
 		this.children = children;
 		this.keys = keys;
-	}
-
-	public List<BTreeNode> getNodes() {
-		return children;
-	}
-
-	public void setNodes(List<BTreeNode> nodes) {
-		this.children = nodes;
-	}
-	
-	public boolean search(int key) {
-		return this.keys.contains(key);
+		this.order = order;
 	}
 	
 	/**
@@ -39,5 +27,31 @@ public class BTreeInnerNode extends BTreeNode {
 			}
 		}
 		return (this.children.size() - 1);
+	}
+	
+	public void addkey(int key, BTreeNode child) {
+		// TODO
+		
+//		this.keys.add(value);
+//		this.keys.sort(new Comparator<Integer>() {
+//			public int compare(Integer key1, Integer key2) {
+//				if(key1 < key2) {
+//					return -1;
+//				}
+//				if(key1 > key2) {
+//					return 1;
+//				}
+//				return 0;
+//			}
+//		});
+//		Collections.sort(this.keys);
+	}
+	
+	public List<BTreeNode> getNodes() {
+		return children;
+	}
+
+	public void setNodes(List<BTreeNode> nodes) {
+		this.children = nodes;
 	}
 }
