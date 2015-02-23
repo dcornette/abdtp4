@@ -30,7 +30,7 @@ public class BTree {
 			}
 		}
 		BTreeInnerNode innerNode = (BTreeInnerNode) node;
-		return this.search(key, innerNode.getNodes().get(innerNode.getIndexByKey(key)));
+		return this.search(key, innerNode.getChildren().get(innerNode.getIndexByKey(key)));
 	}
 	
 	/**
@@ -46,14 +46,24 @@ public class BTree {
 				throw new DuplicateValueException();
 			}
 			leafNode.addValue(value);
+			this.updateRoot();
 		} else {
 			BTreeInnerNode innerNode = (BTreeInnerNode) node;
-			this.insert(value, innerNode.getNodes().get(innerNode.getIndexByKey(value)));
+			this.insert(value, innerNode.getChildren().get(innerNode.getIndexByKey(value)));
 		}
 	}
 	
 	public void delete(int value) {
 		
+	}
+	
+	/**
+	 * Mise à jour de la racine
+	 */
+	public void updateRoot() {
+		while(this.root.getParent() != null) {
+			this.setRoot(this.root.getParent());
+		}
 	}
 	
 	public BTreeNode getRoot() {

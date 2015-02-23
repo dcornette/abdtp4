@@ -6,7 +6,7 @@ public abstract class BTreeNode {
 	
 	protected List<Integer> keys;
 	protected int order;
-	protected BTreeNode parent;
+	protected BTreeInnerNode parent;
 	
 	public boolean search(int key) {
 		return keys.contains(key);
@@ -17,7 +17,7 @@ public abstract class BTreeNode {
 	}
 
 	public boolean isRoot() {
-		return this.parent != null;
+		return this.parent == null;
 	}
 	
 	public List<Integer> getKeys() {
@@ -36,11 +36,11 @@ public abstract class BTreeNode {
 		this.order = order;
 	}
 
-	public BTreeNode getParent() {
+	public BTreeInnerNode getParent() {
 		return parent;
 	}
 
-	public void setParent(BTreeNode parent) {
+	public void setParent(BTreeInnerNode parent) {
 		this.parent = parent;
 	}	
 }

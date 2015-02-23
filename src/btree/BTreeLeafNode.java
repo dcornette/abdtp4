@@ -6,21 +6,19 @@ import java.util.List;
 
 public class BTreeLeafNode extends BTreeNode {
 	
-	public BTreeLeafNode(List<Integer> values, int order, BTreeNode parent) {
+	public BTreeLeafNode(List<Integer> values, int order, BTreeInnerNode parent) {
 		this.keys = values;
 		this.order = order;
 		this.parent = parent;
 	}
 	
 	public void addValue(int value) {
-		if(!this.isFull()) {
-			this.keys.add(value);
-			Collections.sort(this.keys);
-		} else {
-			this.keys.add(value);
-			Collections.sort(this.keys);
-			
-			// process complex insert
+		// On ajoute la valeur et on tri
+		this.keys.add(value);
+		Collections.sort(this.keys);
+		
+		// Si la feuille était pleine, on l'éclate
+		if(this.keys.size() > (2*this.order)) {
 			// Creation nouvelle feuille
 			List<Integer> initialListForNewLeafNode = new ArrayList<Integer>();
 			for(int i=this.order+1; i<this.getKeys().size(); i++) {
@@ -29,7 +27,7 @@ public class BTreeLeafNode extends BTreeNode {
 			BTreeLeafNode newLeafNode = new BTreeLeafNode(initialListForNewLeafNode, order, this.getParent());
 			
 			// Ajout element + feuille dans noeud parent
-			BTreeInnerNode newInnerNode;
+			BTreeInnerNode newFatherNode;
 			if(this.isRoot()) {
 				List<BTreeNode> initialChildrenList = new ArrayList<BTreeNode>();
 				initialChildrenList.add(this);
@@ -38,20 +36,30 @@ public class BTreeLeafNode extends BTreeNode {
 				List<Integer> initialKeyList = new ArrayList<Integer>();
 				initialKeyList.add(this.keys.get(this.order));
 				
-				newInnerNode = new BTreeInnerNode(initialChildrenList, initialKeyList, this.order, null);
+				newFatherNode = new BTreeInnerNode(initialChildrenList, initialKeyList, this.order, null);
 			} else {
-				newInnerNode = (BTreeInnerNode) this.parent;
-				newInnerNode.addkey(this.keys.get(this.order), newLeafNode);
+				newFatherNode = this.parent;
+				newFatherNode.addkey(this.keys.get(this.order), newLeafNode);
 			}
 			
 			// Supression des clés dans la feuille
-			for(int i=this.order; i<this.getKeys().size(); i++) {
-				this.getKeys().remove(i);
+			for(int i=this.order, j=this.getKeys().size(); i<j; i++) {
+				this.getKeys().remove(this.order);
 			}			
 			
 			// Mise à jour des parents
-			this.setParent(newInnerNode);
-			newLeafNode.setParent(newInnerNode);
+			this.setParent(newFatherNode);
+			newLeafNode.setParent(newFatherNode);
 		}
+	}
+
+	@Override
+	public String toString() {
+		String leafNode = "[ ";
+		for(Integer key : this.keys) {
+			leafNode += key + " ";
+		}
+		leafNode += "]";
+		return leafNode;
 	}
 }
