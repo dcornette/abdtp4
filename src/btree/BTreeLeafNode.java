@@ -21,7 +21,7 @@ public class BTreeLeafNode extends BTreeNode {
 		if(this.keys.size() > (2*this.order)) {
 			// Creation nouvelle feuille
 			List<Integer> initialListForNewLeafNode = new ArrayList<Integer>();
-			for(int i=this.order+1; i<this.getKeys().size(); i++) {
+			for(int i=this.order; i<this.getKeys().size(); i++) {
 				initialListForNewLeafNode.add(this.getKeys().get(i));
 			}
 			BTreeLeafNode newLeafNode = new BTreeLeafNode(initialListForNewLeafNode, order, this.getParent());

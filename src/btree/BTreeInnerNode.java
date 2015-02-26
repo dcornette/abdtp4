@@ -53,7 +53,7 @@ public class BTreeInnerNode extends BTreeNode {
 		if(this.keys.size() > (2*this.order)) {
 			// Creation nouveau noeud
 			List<Integer> initialKeysForNewInnerNode = new ArrayList<Integer>();
-			for(int i=this.order+1; i<this.getKeys().size(); i++) {
+			for(int i=this.order; i<this.getKeys().size(); i++) {
 				initialKeysForNewInnerNode.add(this.getKeys().get(i));
 			}
 			
@@ -98,11 +98,10 @@ public class BTreeInnerNode extends BTreeNode {
 	@Override
 	public String toString() {
 		String innerNode = "[ ";
-		for(int i=0; i<this.keys.size(); i++ ) {
-			innerNode += "child" + i + " ";
-			innerNode += this.keys.get(i) + " ";
+		for(Integer key : this.keys) {
+			innerNode += key + " ";
 		}
-		innerNode += "child"+ (this.children.size()-1) + " ]";
+		innerNode += "]";
 		return innerNode;
 	}
 	

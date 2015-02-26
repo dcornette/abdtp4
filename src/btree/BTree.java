@@ -39,7 +39,7 @@ public class BTree {
 	 * @param node
 	 * @throws DuplicateValueException
 	 */
-	public void insert(int value, BTreeNode node) throws DuplicateValueException {
+	public void insertFromNode(int value, BTreeNode node) throws DuplicateValueException {
 		if(node instanceof BTreeLeafNode) {
 			BTreeLeafNode leafNode = (BTreeLeafNode) node;
 			if(leafNode.search(value)) {
@@ -49,8 +49,12 @@ public class BTree {
 			this.updateRoot();
 		} else {
 			BTreeInnerNode innerNode = (BTreeInnerNode) node;
-			this.insert(value, innerNode.getChildren().get(innerNode.getIndexByKey(value)));
+			this.insertFromNode(value, innerNode.getChildren().get(innerNode.getIndexByKey(value)));
 		}
+	}
+	
+	public void insert(int value) throws DuplicateValueException {
+		this.insertFromNode(value, this.root);
 	}
 	
 	public void delete(int value) {
@@ -66,6 +70,46 @@ public class BTree {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		boolean flag = false;
+		BTreeNode current = this.root;
+		List<BTreeNode> nodes = new ArrayList<BTreeNode>();
+		
+		nodes.add(current);
+		nodes.add(new BTreeLeafNode(null,-1,null));
+		String tree = "";
+		
+		while(!nodes.isEmpty()) {
+			if(current.getOrder() == -1) {
+				flag = true;
+				nodes.remove(0);
+				if(!nodes.isEmpty()) {
+					current = nodes.get(0);		
+				}
+			} else {
+				if(flag) {
+					tree += "\n";
+					flag = false;
+				}
+				tree += current;
+				if(current instanceof BTreeInnerNode) {
+					BTreeInnerNode currentInner = (BTreeInnerNode) current;
+					for(BTreeNode child : currentInner.getChildren()) {
+						nodes.add(child);
+					}
+					nodes.add(new BTreeLeafNode(null,-1,null));
+				}
+				nodes.remove(current);
+				if(!nodes.isEmpty()) {
+					current = nodes.get(0);		
+				}				
+			}
+		}
+		
+		return tree;
+	}
+
 	public BTreeNode getRoot() {
 		return root;
 	}
