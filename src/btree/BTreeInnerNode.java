@@ -36,8 +36,8 @@ public class BTreeInnerNode extends BTreeNode {
 		// On ajoute la clé + l'enfant et on tri
 		this.keys.add(key);
 		this.children.add(child);
-		Collections.sort(this.keys);
-		this.children.sort(new Comparator<BTreeNode>() {
+		Collections.sort(this.keys);		
+		Collections.sort(this.children, new Comparator<BTreeNode>() {
 			public int compare(BTreeNode child1, BTreeNode child2) {
 				if(child1.getKeys().get(0) < child2.getKeys().get(0)) {
 					return -1;
