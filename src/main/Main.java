@@ -24,6 +24,9 @@ public class Main {
 		btree.insert(19);
 		btree.insert(20);
 		btree.insert(21);
+		btree.insert(22);
+		btree.insert(24);
+		btree.insert(23);
 		
 		System.out.println(btree);
 //		System.out.println("root "+btree.getRoot());

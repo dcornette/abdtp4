@@ -13,6 +13,10 @@ public class BTreeInnerNode extends BTreeNode {
 		this.children = children;
 		this.keys = keys;
 		this.order = order;
+		
+		for(BTreeNode child : children) {
+			child.setParent(this);
+		}
 	}
 	
 	/**
@@ -53,7 +57,7 @@ public class BTreeInnerNode extends BTreeNode {
 		if(this.keys.size() > (2*this.order)) {
 			// Creation nouveau noeud
 			List<Integer> initialKeysForNewInnerNode = new ArrayList<Integer>();
-			for(int i=this.order; i<this.getKeys().size(); i++) {
+			for(int i=this.order+1; i<this.getKeys().size(); i++) {
 				initialKeysForNewInnerNode.add(this.getKeys().get(i));
 			}
 			
@@ -88,10 +92,6 @@ public class BTreeInnerNode extends BTreeNode {
 			for(int i=this.order+1, j=this.getChildren().size(); i<j; i++) {
 				this.getChildren().remove(this.order+1);
 			}
-			
-			// Mise à jour des parents
-			this.setParent(newFatherNode);
-			newInnerNode.setParent(newFatherNode);
 		}
 	}
 	

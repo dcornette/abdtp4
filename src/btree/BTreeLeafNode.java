@@ -46,10 +46,6 @@ public class BTreeLeafNode extends BTreeNode {
 			for(int i=this.order, j=this.getKeys().size(); i<j; i++) {
 				this.getKeys().remove(this.order);
 			}			
-			
-			// Mise à jour des parents
-			this.setParent(newFatherNode);
-			newLeafNode.setParent(newFatherNode);
 		}
 	}
 

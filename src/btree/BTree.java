@@ -87,12 +87,12 @@ public class BTree {
 			tree[i] = "";
 		}
 		
-		// Rangement des noueds par profondeur
+		// Rangement des noeuds par profondeur
 		for(BTreeNode node : nodes) {
-			
+			System.out.println(node.getParent());
 			if(!node.isRoot()) {
 				if (lastParent[node.getDepth()-1] != null && !lastParent[node.getDepth()-1].equals(node.getParent().toString())) {
-					tree[node.getDepth()-1] += " | ";
+					tree[node.getDepth()-1] += " ----> ";
 				}
 				lastParent[node.getDepth()-1] = node.getParent().toString();
 			}
