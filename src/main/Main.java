@@ -6,7 +6,7 @@ import btree.DuplicateValueException;
 public class Main {
 	
 	public static void main(String args[]) throws DuplicateValueException {
-		BTree btree = new BTree(2, 0);
+		BTree btree = new BTree(2,5,0);
 		
 		btree.insert(12);
 		btree.insert(6);

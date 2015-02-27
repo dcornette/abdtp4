@@ -42,5 +42,15 @@ public abstract class BTreeNode {
 
 	public void setParent(BTreeInnerNode parent) {
 		this.parent = parent;
-	}	
+	}
+	
+	public int getDepth() {
+		BTreeNode current = this;
+		int depth = 1;
+		while(current.getParent() != null) {
+			current = current.getParent();
+			depth++;
+		}
+		return depth;
+	}
 }

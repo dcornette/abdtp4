@@ -7,14 +7,16 @@ public class BTree {
 
 	private BTreeNode root;
 	private int order;
+	private int depthMax;
 	
-	public BTree(int order, int initialValue) {
+	public BTree(int order, int depthMax, int initialValue) {
 		List<Integer> initialList = new ArrayList<Integer>();
 		initialList.add(initialValue);
 		this.root = new BTreeLeafNode(initialList, order, null);
 		this.order = order;
+		this.depthMax = depthMax;
 	}
-	
+
 	/**
 	 * Algorithme de recherche d'une clé dans l'arbre
 	 * @param key
@@ -72,42 +74,65 @@ public class BTree {
 	
 	@Override
 	public String toString() {
-		boolean flag = false;
-		BTreeNode current = this.root;
-		List<BTreeNode> nodes = new ArrayList<BTreeNode>();
 		
-		nodes.add(current);
-		nodes.add(new BTreeLeafNode(null,-1,null));
-		String tree = "";
+		String[] tree = new String[this.getDepthMax()];
+		String[] lastParent = new String[this.getDepthMax()];
+		String result = new String();
 		
-		while(!nodes.isEmpty()) {
-			if(current.getOrder() == -1) {
-				flag = true;
-				nodes.remove(0);
-				if(!nodes.isEmpty()) {
-					current = nodes.get(0);		
-				}
-			} else {
-				if(flag) {
-					tree += "\n";
-					flag = false;
-				}
-				tree += current;
-				if(current instanceof BTreeInnerNode) {
-					BTreeInnerNode currentInner = (BTreeInnerNode) current;
-					for(BTreeNode child : currentInner.getChildren()) {
-						nodes.add(child);
-					}
-					nodes.add(new BTreeLeafNode(null,-1,null));
-				}
-				nodes.remove(current);
-				if(!nodes.isEmpty()) {
-					current = nodes.get(0);		
-				}				
-			}
+		// On récupére la liste des noeuds
+		List<BTreeNode> nodes = this.getListNodes();
+		
+		// On initialise tree avec des strings vides
+		for(int i = 0; i < tree.length; i++) {
+			tree[i] = "";
 		}
 		
-		return tree;
+		// Rangement des noueds par profondeur
+		for(BTreeNode node : nodes) {
+			
+			if(!node.isRoot()) {
+				if (lastParent[node.getDepth()-1] != null && !lastParent[node.getDepth()-1].equals(node.getParent().toString())) {
+					tree[node.getDepth()-1] += " | ";
+				}
+				lastParent[node.getDepth()-1] = node.getParent().toString();
+			}
+			
+			tree[node.getDepth()-1] += node.toString();
+			
+			
+		}
+			
+		// Affichage
+		for(int i = 0; i < this.getDepthMax(); i++) {
+			if (tree[i] != null)
+				result += tree[i] + "\n";
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Retourne la liste des noeuds de l'arbre.
+	 * @return listNodes
+	 */
+	public List<BTreeNode> getListNodes() {
+		List<BTreeNode> nodes = new ArrayList<BTreeNode>();
+		BTreeNode current;
+		int cpt = 0;
+		
+		nodes.add(this.root);
+		
+		while(cpt < nodes.size()) {
+			current = nodes.get(cpt);
+			if(current instanceof BTreeInnerNode) {
+				for(BTreeNode child : ((BTreeInnerNode)current).getChildren()) {
+					nodes.add(child);
+				}
+			}
+			cpt++;
+		}
+		
+		return nodes;
 	}
 
 	public BTreeNode getRoot() {
@@ -120,5 +145,17 @@ public class BTree {
 
 	public int getOrder() {
 		return order;
+	}
+	
+	public int getDepthMax() {
+		return depthMax;
+	}
+
+	public void setDepthMax(int depthMax) {
+		this.depthMax = depthMax;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
 }
