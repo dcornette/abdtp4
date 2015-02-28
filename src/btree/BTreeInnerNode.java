@@ -95,6 +95,10 @@ public class BTreeInnerNode extends BTreeNode {
 		}
 	}
 	
+	public void removekey(int key, BTreeNode child) {
+		this.keys.remove(this.keys.indexOf(key));
+	}
+	
 	@Override
 	public String toString() {
 		String innerNode = "[ ";

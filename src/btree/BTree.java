@@ -59,8 +59,22 @@ public class BTree {
 		this.insertFromNode(value, this.root);
 	}
 	
-	public void delete(int value) {
-		
+	public void delete(int value) throws DuplicateValueException {
+		this.deleteFromNode(value, this.root);
+	}
+	
+	public void deleteFromNode(int value, BTreeNode node) throws DuplicateValueException {
+		if(node instanceof BTreeLeafNode) {
+			BTreeLeafNode leafNode = (BTreeLeafNode) node;
+			if(!leafNode.search(value)) {
+				throw new DuplicateValueException();
+			}
+			leafNode.removeValue(value);
+			this.updateRoot();
+		} else {
+			BTreeInnerNode innerNode = (BTreeInnerNode) node;
+			this.deleteFromNode(value, innerNode.getChildren().get(innerNode.getIndexByKey(value)));
+		}
 	}
 	
 	/**
@@ -89,7 +103,7 @@ public class BTree {
 		
 		// Rangement des noeuds par profondeur
 		for(BTreeNode node : nodes) {
-			System.out.println(node.getParent());
+//			System.out.println(node.getParent());
 			if(!node.isRoot()) {
 				if (lastParent[node.getDepth()-1] != null && !lastParent[node.getDepth()-1].equals(node.getParent().toString())) {
 					tree[node.getDepth()-1] += " ----> ";
