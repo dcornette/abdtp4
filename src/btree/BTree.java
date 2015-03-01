@@ -118,7 +118,7 @@ public class BTree {
 			
 		// Affichage
 		for(int i = 0; i < this.getDepthMax(); i++) {
-			if (tree[i] != null)
+			if (!tree[i].isEmpty())
 				result += tree[i] + "\n";
 		}
 		

@@ -9,10 +9,11 @@ public class BTreeInnerNode extends BTreeNode {
 	
 	private List<BTreeNode> children;
 	
-	public BTreeInnerNode(List<BTreeNode> children, List<Integer> keys, int order, BTreeNode parent) {
+	public BTreeInnerNode(List<BTreeNode> children, List<Integer> keys, int order, BTreeInnerNode parent) {
 		this.children = children;
 		this.keys = keys;
 		this.order = order;
+		this.parent = parent;
 		
 		for(BTreeNode child : children) {
 			child.setParent(this);
